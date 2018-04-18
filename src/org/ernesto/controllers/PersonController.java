@@ -19,8 +19,12 @@ public class PersonController {
     }
 
     public Person getPerson(int id){
-        Person person = db.personList.stream().filter(p -> p.getId() == id).collect(Collectors.toList()).get(0);
-        return person;
+        try{
+            Person person = db.personList.stream().filter(p -> p.getId() == id).collect(Collectors.toList()).get(0);
+            return person;
+        }catch(IndexOutOfBoundsException ex){
+            return null;
+        }
     }
 
     public void savePerson(Person person){
@@ -28,9 +32,13 @@ public class PersonController {
     }
 
     public void updatePerson(Person person){
-        Person personToReplace = db.personList.stream().filter(p -> p.getId() == person.getId()).collect(Collectors.toList()).get(0);
-        int personToReplacePosition = db.personList.indexOf(personToReplace);
-        db.personList.set(personToReplacePosition, person);
+        try{
+            Person personToReplace = db.personList.stream().filter(p -> p.getId() == person.getId()).collect(Collectors.toList()).get(0);
+            int personToReplacePosition = db.personList.indexOf(personToReplace);
+            db.personList.set(personToReplacePosition, person);
+        }catch (IndexOutOfBoundsException ex){
+            ex.printStackTrace();
+        }
     }
 
     public void deletePerson(int id){

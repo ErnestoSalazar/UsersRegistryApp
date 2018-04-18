@@ -17,11 +17,13 @@ import java.util.List;
 
 public class FormPerson extends HttpServlet {
     PersonController personController = PersonController.getInstance();
+    public static final String SENT = "sent";
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Person> personList = personController.getAllPersons();
         int personId;
-        if(!request.getParameter("sent").isEmpty()){ // check if it's edited person
-            personId = Integer.parseInt(request.getParameter("sent"));
+        if(!request.getParameter(SENT).isEmpty()){ // check if it's edited person
+            personId = Integer.parseInt(request.getParameter(SENT));
         }
         else{
             personId = (personList.size() != 0 ) ? personList.get(personList.size()-1).getId() +1 : 1 ;
@@ -33,7 +35,7 @@ public class FormPerson extends HttpServlet {
                         .setAge(Integer.parseInt(request.getParameter("age")))
                         .build();
 
-        if(!request.getParameter("sent").isEmpty()){ // if it's an edited person
+        if(!request.getParameter(SENT).isEmpty()){ // if it's an edited person
             personController.updatePerson(person); // update it
         }
         else{

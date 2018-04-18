@@ -7,31 +7,50 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PersonController {
-    private static DataBase db = DataBase.getInstance();
+    private static PersonController personController = null;
+    private DataBase db;
 
-    public static List<Person> getAllPersons(){
+    private PersonController(){
+        this.db = DataBase.getInstance();
+    }
+
+    public List<Person> getAllPersons(){
         return db.personList;
     }
 
-    public static Person getPerson(int id){
-        Person person = db.personList.stream().filter(p -> p.getId() == id).collect(Collectors.toList()).get(0);
-        return person;
+    public Person getPerson(int id){
+        try{
+            Person person = db.personList.stream().filter(p -> p.getId() == id).collect(Collectors.toList()).get(0);
+            return person;
+        }catch(IndexOutOfBoundsException ex){
+            return null;
+        }
     }
 
-    public static void savePerson(Person person){
+    public void savePerson(Person person){
         db.personList.add(person);
     }
 
-    public static void updatePerson(Person person){
-        Person personToReplace = db.personList.stream().filter(p -> p.getId() == person.getId()).collect(Collectors.toList()).get(0);
-        int personToReplacePosition = db.personList.indexOf(personToReplace);
-        db.personList.set(personToReplacePosition, person);
+    public void updatePerson(Person person){
+        try{
+            Person personToReplace = db.personList.stream().filter(p -> p.getId() == person.getId()).collect(Collectors.toList()).get(0);
+            int personToReplacePosition = db.personList.indexOf(personToReplace);
+            db.personList.set(personToReplacePosition, person);
+        }catch (IndexOutOfBoundsException ex){
+            ex.printStackTrace();
+        }
     }
 
-    public static void deletePerson(int id){
+    public void deletePerson(int id){
         db.personList.removeIf(p -> p.getId() == id);
     }
 
 
+    public static PersonController getInstance(){
+        if(personController == null){
+            personController = new PersonController();
+        }
+        return personController;
+    }
 
 }

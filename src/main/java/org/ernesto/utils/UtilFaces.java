@@ -1,4 +1,4 @@
-package utils;
+package org.ernesto.utils;
 
 import javax.servlet.ServletContext;
 import java.io.BufferedReader;

@@ -3,7 +3,7 @@ package org.ernesto.servs;
 import org.ernesto.builders.PersonBuilder;
 import org.ernesto.controllers.PersonController;
 import org.ernesto.models.Person;
-import utils.UtilFaces;
+import org.ernesto.utils.UtilFaces;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -42,7 +42,7 @@ public class FormPerson extends HttpServlet {
             personController.savePerson(person); // if not, create a new one
         }
 
-        response.sendRedirect("/home");
+        response.sendRedirect("home");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,7 +58,7 @@ public class FormPerson extends HttpServlet {
 
         UtilFaces.readAndPrintHtml("/index.html", context, out);
 
-        out.println("<form action='/addperson' method='POST'>");
+        out.println("<form action='addperson' method='POST'>");
 
         if(person != null){ // form to display info from person to edit
             out.println("<input type='text' name='name' placeholder='Name' value='"+person.getName()+"'>");
@@ -70,7 +70,7 @@ public class FormPerson extends HttpServlet {
             out.println("<input type='text' name='age' placeholder='Age' >");
             out.println("<button type='submit' name='sent' class='btn btn-success'>Add</button>");
         }
-        out.println("<a href='/home' class='btn btn-danger'>Cancel</a>");
+        out.println("<a href='home' class='btn btn-danger'>Cancel</a>");
         out.println("</form>");
 
         UtilFaces.readAndPrintHtml("/footer.html", context, out);

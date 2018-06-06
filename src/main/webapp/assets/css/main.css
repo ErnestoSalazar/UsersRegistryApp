@@ -1,0 +1,34 @@
+.login-container{
+    position: relative;
+    display: block;
+    width: 450px;
+    height: 600px;
+    margin: 0 auto;
+    margin-top: 30px;
+    background-color: #fff;
+    border: 1px solid #bcbcbc;
+    -webkit-box-shadow: 4px 0 13px 0 rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 0 13px 0 rgba(0,0,0,0.75);
+    box-shadow: 4px 0 13px 0 rgba(0,0,0,0.75);
+}
+
+.login-container h1{
+    position: relative;
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: normal;
+}
+
+.login-container form{
+    position: relative;
+    display: block;
+    padding: 0 50px;
+    margin-top: 50px;
+}
+
+.login-container form > button{
+    position: relative;
+    display: block;
+    margin: 0 auto;
+}

@@ -14,8 +14,8 @@ import java.util.List;
 
 
 public class Home extends HttpServlet {
-    PersonController personController = PersonController.getInstance();
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private PersonController personController = PersonController.getInstance();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int personId = Integer.parseInt(request.getParameter("sent"));
         personController.deletePerson(personId);
         response.sendRedirect("home");
@@ -31,8 +31,10 @@ public class Home extends HttpServlet {
         out.println("<table class ='table table-striped'");
         for (Person personItem : personList){
             out.println("<tr>");
-            out.println("<td> <a href='addperson?id="+personItem.getId()+"'>"+ personItem.getName() +" </td>");
+            out.println("<td> <a href='addperson?id="+personItem.getId()+"'>"+ personItem.getName() +" </a></td>");
+            out.println("<td>" + personItem.getNickname()+"</td>");
             out.println("<td> "+ personItem.getAge() +" </td>");
+
             out.println("<td><form action='home' method='POST'>");
             out.println("<button type='submit' name='sent' class='btn btn-danger' value='"+personItem.getId()+"'>Eliminar</button>");
             out.println("</form></td>");

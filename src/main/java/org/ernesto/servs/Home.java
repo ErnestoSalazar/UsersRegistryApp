@@ -2,7 +2,7 @@ package org.ernesto.servs;
 
 import org.ernesto.controllers.PersonController;
 import org.ernesto.models.Person;
-import utils.UtilFaces;
+import org.ernesto.utils.UtilFaces;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,11 +14,11 @@ import java.util.List;
 
 
 public class Home extends HttpServlet {
-    PersonController personController = PersonController.getInstance();
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private PersonController personController = PersonController.getInstance();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int personId = Integer.parseInt(request.getParameter("sent"));
         personController.deletePerson(personId);
-        response.sendRedirect("/home");
+        response.sendRedirect("home");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,15 +31,17 @@ public class Home extends HttpServlet {
         out.println("<table class ='table table-striped'");
         for (Person personItem : personList){
             out.println("<tr>");
-            out.println("<td> <a href='/addperson?id="+personItem.getId()+"'>"+ personItem.getName() +" </td>");
+            out.println("<td> <a href='addperson?id="+personItem.getId()+"'>"+ personItem.getName() +" </a></td>");
+            out.println("<td>" + personItem.getNickname()+"</td>");
             out.println("<td> "+ personItem.getAge() +" </td>");
-            out.println("<td><form action='/home' method='POST'>");
+
+            out.println("<td><form action='home' method='POST'>");
             out.println("<button type='submit' name='sent' class='btn btn-danger' value='"+personItem.getId()+"'>Eliminar</button>");
             out.println("</form></td>");
             out.println("</tr>");
         }
         out.println("</table>");
-        out.println("<a href='/addperson' class='btn btn-primary pull-right'>Add person</a>");
+        out.println("<a href='addperson' class='btn btn-primary pull-right'>Add person</a>");
 
         UtilFaces.readAndPrintHtml("/footer.html", context, out);
     }

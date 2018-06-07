@@ -3,7 +3,7 @@ package org.ernesto.servs;
 import org.ernesto.builders.PersonBuilder;
 import org.ernesto.controllers.PersonController;
 import org.ernesto.models.Person;
-import utils.UtilFaces;
+import org.ernesto.utils.UtilFaces;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,10 +16,10 @@ import java.util.List;
 
 
 public class FormPerson extends HttpServlet {
-    PersonController personController = PersonController.getInstance();
-    public static final String SENT = "sent";
+    private PersonController personController = PersonController.getInstance();
+    private static final String SENT = "sent";
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Person> personList = personController.getAllPersons();
         int personId;
         if(!request.getParameter(SENT).isEmpty()){ // check if it's edited person
@@ -32,7 +32,9 @@ public class FormPerson extends HttpServlet {
         Person person = new PersonBuilder()
                         .setId(personId)
                         .setName(request.getParameter("name"))
+                        .setNickname(request.getParameter("nickname"))
                         .setAge(Integer.parseInt(request.getParameter("age")))
+                        .setPassword(request.getParameter("password"))
                         .build();
 
         if(!request.getParameter(SENT).isEmpty()){ // if it's an edited person
@@ -42,10 +44,10 @@ public class FormPerson extends HttpServlet {
             personController.savePerson(person); // if not, create a new one
         }
 
-        response.sendRedirect("/home");
+        response.sendRedirect("home");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ServletContext context = getServletContext();
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
@@ -58,19 +60,23 @@ public class FormPerson extends HttpServlet {
 
         UtilFaces.readAndPrintHtml("/index.html", context, out);
 
-        out.println("<form action='/addperson' method='POST'>");
+        out.println("<form action='addperson' method='POST'>");
 
         if(person != null){ // form to display info from person to edit
             out.println("<input type='text' name='name' placeholder='Name' value='"+person.getName()+"'>");
+            out.println("<input type='text' name='nickname' placeholder='Nickname' value='"+person.getNickname()+"'>");
             out.println("<input type='text' name='age' placeholder='age' value='"+person.getAge()+"'>");
+            out.println("<input type='text' name='password' placeholder='Password' value='"+person.getPassword()+"'>");
             out.println("<button type='submit' name='sent' value='"+person.getId()+"' class='btn btn-success'>Update</button>");
         }
         else{ // if not just display an empty form
             out.println("<input type='text' name='name' placeholder='Name'>");
+            out.println("<input type='text' name='nickname' placeholder='Nickname'>");
             out.println("<input type='text' name='age' placeholder='Age' >");
+            out.println("<input type='password' name='password' placeholder='Password' >");
             out.println("<button type='submit' name='sent' class='btn btn-success'>Add</button>");
         }
-        out.println("<a href='/home' class='btn btn-danger'>Cancel</a>");
+        out.println("<a href='home' class='btn btn-danger'>Cancel</a>");
         out.println("</form>");
 
         UtilFaces.readAndPrintHtml("/footer.html", context, out);

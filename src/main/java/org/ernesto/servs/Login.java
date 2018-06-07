@@ -1,5 +1,7 @@
 package org.ernesto.servs;
 
+import org.ernesto.controllers.LoginController;
+import org.ernesto.controllers.PersonController;
 import org.ernesto.utils.UtilFaces;
 
 import javax.servlet.ServletContext;
@@ -10,6 +12,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Login extends HttpServlet {
+    LoginController loginController = LoginController.getInstance();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if(loginController.loginValidator(request.getParameter("nickname"), request.getParameter("password-e"))){
+            response.sendRedirect("home");
+        }
+        else{
+            response.sendRedirect("login");
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ServletContext context = getServletContext();
